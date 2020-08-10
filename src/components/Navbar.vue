@@ -5,7 +5,7 @@
         <a href="#" @click.prevent="$emit('toggle')">
           <i class="material-icons black-text">dehaze</i>
         </a>
-        <span class="black-text">{{date}}</span>
+        <span class="black-text">{{date|transformDate}}</span>
       </div>
 
       <ul class="right hide-on-small-and-down">
@@ -44,18 +44,23 @@ export default {
     dropdown: null,
   }),
   methods: {
-    logout () {
+    logout() {
       console.log("logout");
-      this.$router.push('/login')
+      this.$router.push("/login?message=logout");
     },
   },
-  mounted () {
+  filters: {
+    transformDate(date) {
+      return new Date(date).toLocaleTimeString();
+    },
+  },
+  mounted() {
     // eslint-disable-next-line no-undef
     this.dropdown = M.Dropdown.init(this.$refs.dropdown);
 
     this.timeOut = setInterval(() => (this.date = new Date()), 1000);
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timeOut);
     if (this.dropdown && this.dropdown.destroy) {
       this.dropdown.destroy();

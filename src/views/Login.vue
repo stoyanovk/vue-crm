@@ -10,7 +10,6 @@
           class="validate"
           :class="{invalid:(!$v.email.email && $v.email.$dirty)||(!$v.email.required && $v.email.$dirty)}"
           v-model="email"
-          @blur="handleBlur"
         />
         <label for="email">Email</label>
         <small
@@ -28,7 +27,6 @@
           type="password"
           name="password"
           class="validate"
-          @blur="handleBlur"
           v-model="password"
           :class="{invalid:(!$v.password.required && $v.password.$dirty)||(!$v.password.minLength && $v.password.$dirty)}"
         />
@@ -61,6 +59,7 @@
 
 <script>
 import { required, minLength, email } from "vuelidate/lib/validators";
+import { messages } from "@/utils/data";
 
 export default {
   name: "Login",
@@ -79,15 +78,21 @@ export default {
     },
   },
   methods: {
-    handleBlur({ target: { name } }) {
-      this.$v[name].$touch();
-    },
     handleSubmit() {
       if (this.$v.$invalid) {
         this.$v.$touch();
+        return;
       }
+      const data = {};
+      data.email = this.email;
+      data.password = this.password;
+      console.log(data);
     },
   },
-  mounted() {},
+  mounted() {
+    if (messages[this.$route.query.message]) {
+      this.$showMessage(messages[this.$route.query.message]);
+    }
+  },
 };
 </script>
