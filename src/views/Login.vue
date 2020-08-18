@@ -8,16 +8,20 @@
           type="text"
           name="email"
           class="validate"
-          :class="{invalid:(!$v.email.email && $v.email.$dirty)||(!$v.email.required && $v.email.$dirty)}"
+          :class="{
+            invalid:
+              (!$v.email.email && $v.email.$dirty) ||
+              (!$v.email.required && $v.email.$dirty)
+          }"
           v-model="email"
         />
         <label for="email">Email</label>
         <small
-          v-if="(!$v.email.email && $v.email.$dirty)"
+          v-if="!$v.email.email && $v.email.$dirty"
           class="helper-text invalid"
         >full email please</small>
         <small
-          v-else-if="(!$v.email.required && $v.email.$dirty)"
+          v-else-if="!$v.email.required && $v.email.$dirty"
           class="helper-text invalid"
         >full this field please</small>
       </div>
@@ -28,15 +32,19 @@
           name="password"
           class="validate"
           v-model="password"
-          :class="{invalid:(!$v.password.required && $v.password.$dirty)||(!$v.password.minLength && $v.password.$dirty)}"
+          :class="{
+            invalid:
+              (!$v.password.required && $v.password.$dirty) ||
+              (!$v.password.minLength && $v.password.$dirty)
+          }"
         />
         <label for="password">Пароль</label>
         <small
-          v-if="(!$v.password.required && $v.password.$dirty)"
+          v-if="!$v.password.required && $v.password.$dirty"
           class="helper-text invalid"
         >full email please</small>
         <small
-          v-else-if="(!$v.password.minLength && $v.password.$dirty)"
+          v-else-if="!$v.password.minLength && $v.password.$dirty"
           class="helper-text invalid"
         >password length must be more 6 letter</small>
       </div>
@@ -78,15 +86,16 @@ export default {
     },
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
       }
-      const data = {};
-      data.email = this.email;
-      data.password = this.password;
-      console.log(data);
+      const { email, password } = this;
+      try {
+        await this.$store.dispatch("login", { email, password });
+        this.$router.push("/");
+      } catch (e) {}
     },
   },
   mounted() {

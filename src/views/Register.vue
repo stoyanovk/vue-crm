@@ -68,7 +68,7 @@
 
       <p class="center">
         Уже есть аккаунт?
-        <router-link to="/">Войти!</router-link>
+        <router-link to="/login">Войти!</router-link>
       </p>
     </div>
   </form>
@@ -102,19 +102,16 @@ export default {
     },
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
       }
-      const data = {
-        email: this.email,
-        password: this.password,
-        name: this.name,
-        agree: this.agree,
-      };
-      console.log(data);
-      this.$router.push("/");
+      const { email, password, name } = this;
+      try {
+        await this.$store.dispatch("register", { email, password, name });
+        this.$router.push("/");
+      } catch (e) {}
     },
   },
 };
