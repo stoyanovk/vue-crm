@@ -58,7 +58,8 @@ export default {
     // eslint-disable-next-line no-undef
     this.dropdown = M.Dropdown.init(this.$refs.dropdown);
 
-    this.timeOut = setInterval(() => (this.date = new Date()), 1000);
+    // this.timeOut = setInterval(() => (this.date = new Date()), 1000);
+    this.$store.dispatch("fetchInfo");
   },
   beforeDestroy() {
     clearInterval(this.timeOut);

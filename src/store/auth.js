@@ -3,11 +3,22 @@ export default {
   state: {
     user: null
   },
-  mutations: {},
+  mutations: {
+    setUser(state, user) {
+      state.user = user;
+    }
+  },
   actions: {
     async login({ commit }, { email, password }) {
       try {
-        await firebase.auth().signInWithEmailAndPassword(email, password);
+        const response = await firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password);
+
+        commit("setUser", {
+          email: response.user.email,
+          uid: response.user.uid
+        });
       } catch (e) {
         commit("setError", e);
         throw new Error(e);
@@ -31,10 +42,14 @@ export default {
     },
     async getUser() {
       const user = await firebase.auth().currentUser;
+      console.log(user);
       return user.uid || null;
     },
     async logout() {
       await firebase.auth().signOut();
+    },
+    setUser({ commit }, user) {
+      commit("setUser", user);
     }
   },
   getters: {
