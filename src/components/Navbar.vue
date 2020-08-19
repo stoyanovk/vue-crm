@@ -11,7 +11,7 @@
       <ul class="right hide-on-small-and-down">
         <li>
           <a class="dropdown-trigger black-text" href="#" data-target="dropdown" ref="dropdown">
-            USER NAME
+            {{name}}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -54,13 +54,20 @@ export default {
       return new Date(date).toLocaleTimeString();
     },
   },
+  computed: {
+    name() {
+      return this.$store.getters.info
+        ? this.$store.getters.info.name
+        : "lololololo";
+    },
+  },
   mounted() {
     // eslint-disable-next-line no-undef
     this.dropdown = M.Dropdown.init(this.$refs.dropdown);
 
-    // this.timeOut = setInterval(() => (this.date = new Date()), 1000);
-    this.$store.dispatch("fetchInfo");
+    this.timeOut = setInterval(() => (this.date = new Date()), 1000);
   },
+  updated() {},
   beforeDestroy() {
     clearInterval(this.timeOut);
     if (this.dropdown && this.dropdown.destroy) {

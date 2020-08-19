@@ -33,6 +33,7 @@ new Vue({
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch("setUser", { email: user.email, uid: user.uid });
+        this.$store.dispatch("fetchInfo", user.uid);
       }
     });
   }

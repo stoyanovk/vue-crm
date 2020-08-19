@@ -1,17 +1,27 @@
-// import firebase from "firebase/app";
+import firebase from "firebase/app";
 
 export default {
-  state: {},
+  state: {
+    info: null
+  },
   actions: {
-    async fetchInfo({ commit, dispatch, getters }) {
-      const uid = getters.user;
-      console.log(uid);
-      //   const info = await firebase
-      //     .database()
-      //     .ref(`/user/${uid}`)
-      //     .once();
+    async fetchInfo({ commit }, uid) {
+      const info = (
+        await firebase
+          .database()
+          .ref(`/user/${uid}/info`)
+          .once("value")
+      ).val();
+
+      commit("setInfo", info);
     }
   },
-  mutation: {},
-  getters: {}
+  mutations: {
+    setInfo(state, info) {
+      state.info = info;
+    }
+  },
+  getters: {
+    info: state => state.info
+  }
 };

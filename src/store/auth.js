@@ -45,8 +45,9 @@ export default {
       console.log(user);
       return user.uid || null;
     },
-    async logout() {
+    async logout({ commit }) {
       await firebase.auth().signOut();
+      commit("setInfo", null);
     },
     setUser({ commit }, user) {
       commit("setUser", user);
