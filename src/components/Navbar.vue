@@ -56,9 +56,7 @@ export default {
   },
   computed: {
     name() {
-      return this.$store.getters.info
-        ? this.$store.getters.info.name
-        : "lololololo";
+      return this.$store.getters.info ? this.$store.getters.info.name : null;
     },
   },
   mounted() {
